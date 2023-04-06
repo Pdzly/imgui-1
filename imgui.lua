@@ -423,11 +423,11 @@ end
 
 function imgui.xButton(x, y, w, h, borderWidth, borderClr, hoverClr, pressColor)
 	local bw = borderWidth or 1
-
+	local hv = imgui.IsHovering(x, y, w, h)
 	local bgColor = imgui.IsHovering(x, y, w, h) and imgui.skin.backgroundHover or imgui.skin.background
 	local borderColor =
 		((imgui.IsPressing() and imgui.IsHovering(x, y, w, h)) and (pressColor or imgui.skin.borderPress))
-		or (imgui.IsHovering(x, y, w, h) and (hoverClr or imgui.skin.borderHover))
+		or (hv and (hoverClr or imgui.skin.borderHover))
 		or (borderClr or imgui.skin.border)
 
 	surface.SetDrawColor(bgColor)
@@ -466,12 +466,12 @@ function imgui.xTextButton(text, font, x, y, w, h, borderWidth, color, hoverClr,
 		or (imgui.IsHovering(x, y, w, h) and (hoverClr or imgui.skin.foregroundHover))
 		or (color or imgui.skin.foreground)
 
-	local clicked = imgui.xButton(x, y, w, h, borderWidth, color, hoverClr, pressColor)
+	local clicked, hovered = imgui.xButton(x, y, w, h, borderWidth, color, hoverClr, pressColor)
 
 	font = imgui.xFont(font, math.floor(h * 0.618))
 	draw.SimpleText(text, font, x + w / 2, y + h / 2, fgColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-	return clicked
+	return clicked, hovered
 end
 
 return imgui
